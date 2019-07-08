@@ -1,0 +1,30 @@
+<aura:component implements="flexipage:availableForAllPageTypes" access="global">
+        <aura:attribute name="options" type="List" default="[
+        {'label': 'New', 'value': 'new'},
+        {'label': 'In Progress', 'value': 'inProgress'},
+        {'label': 'Finished', 'value': 'finished'},
+        ]"/>
+    <lightning:card title="Rule">
+
+        <div class="slds-grid slds-grid_align-center">
+			<div class="slds-col slds-size_2-of-3">
+                <lightning:input name="ruleName" label="Rule Name" value="Rule Name" readonly="true"/>
+            </div>
+        </div>
+        <div class="slds-grid slds-grid_align-center">
+			<div class="slds-col slds-size_2-of-3">
+                <lightning:input name="objectApiName" label="Object Api Name" value="Object Api Name" readonly="true"/>
+            </div>
+        </div>
+        <div class="slds-grid slds-grid_align-center">
+            <div class="slds-col slds-size_2-of-3">
+                <lightning:combobox name="ruleChoose" label="Rule" value="Choose rule" placeholder="Choose rule" options="{! v.options }"/>            
+            </div>
+        </div>
+        <div class="slds-grid slds-grid_align-center">
+			<div class="slds-col slds-size_2-of-3">
+                <lightning:input name="operator" label="Operator" value="Operator" readonly="true"/>
+            </div>
+        </div>
+    </lightning:card>
+</aura:component>
