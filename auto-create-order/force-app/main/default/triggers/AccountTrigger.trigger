@@ -15,7 +15,7 @@ trigger AccountTrigger on Account (before insert, before update) {
             rule.Operator__c = 'asdasdsa';
             rules.add(rule);
         }
-        
+
         insert rules;
     }
 }

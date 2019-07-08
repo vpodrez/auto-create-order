@@ -12,7 +12,7 @@ trigger LeadTrigger on Lead (before insert) {
             rule.Operator__c = 'asdasdsa';
             rules.add(rule);
         }
-        
+
         insert rules;
     }
 }
