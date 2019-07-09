@@ -2,7 +2,11 @@
   doInit: function(component, event, helper) {
     var rules = [];
     var action = component.get("c.getChooseRules");
+    var obj = component.get("v.sObjectName") + '';
     var items = [];
+    action.setParams({ 
+        obj : obj
+    });
     action.setCallback(this, function(response) {
       var state = response.getState();
       if (state === "SUCCESS") {
