@@ -1,36 +1,30 @@
 trigger ContactTrigger on Contact (before insert, before update) {
 
     if (Trigger.isUpdate) {
-        List<Contact> contacts = Trigger.new;
-        List<Rule__c> rules = new List<Rule__c>();
+         List<Contact> contacts = Trigger.new;
+        Map<String, Rule__c> rules = new Map<String, Rule__c>([Select Field_Api_Name__c From Rule__c Where Object_Api_Name__c = 'Contact']);
+		// all rule for Contact <Field Api Name, Rule>
         for(Contact cont : contacts) {
-            if (cont.LastName == 'Test') {
-                Rule__c rule = new Rule__c();
-                rule.Object_Api_Name__c = 'Contact';
-                rule.Field_Api_Name__c = cont.LastName;
-                rule.Field_Value__c = 'Test';
-                rule.Operator__c = 'equal';
-                rules.add(rule);
+            if (cont.LastName == 'Test' && rules.containsKey(cont.LastName)) {
+                // Update Order
+                // Order__c order = new Order__c();
             }
         }
 
-        update rules;
+        //update order;
     }
 
     if (Trigger.isInsert) {
         List<Contact> contacts = Trigger.new;
-        List<Rule__c> rules = new List<Rule__c>();
+        Map<String, Rule__c> rules = new Map<String, Rule__c>([Select Field_Api_Name__c From Rule__c Where Object_Api_Name__c = 'Contact']);
+		// all rule for Contact <Field Api Name, Rule>
         for(Contact cont : contacts) {
-            if (cont.LastName == 'Test') {
-                Rule__c rule = new Rule__c();
-                rule.Object_Api_Name__c = 'Contact';
-                rule.Field_Api_Name__c = cont.LastName;
-                rule.Field_Value__c = 'Test';
-                rule.Operator__c = 'equal';
-                rules.add(rule);
+            if (cont.LastName == 'Test' && rules.containsKey(cont.LastName)) {
+                // Insert Order
+                // Order__c order = new Order__c();
             }
         }
 
-        insert rules;
+        //insert order;
     }
 }

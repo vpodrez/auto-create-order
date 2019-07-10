@@ -5,11 +5,10 @@ trigger OpportunityTrigger on Opportunity (before insert) {
         List<Rule__c> rules = new List<Rule__c>();
         for(Opportunity opp : opportunities) {
             Rule__c rule = new Rule__c();
-            rule.Name = 'New Rule Name';
             rule.Object_Api_Name__c = 'Opportunity';
-            rule.Field_Api_Name__c = opp.Name;
-            rule.Field_Value__c = '123213';
-            rule.Operator__c = 'asdasdsa';
+            rule.Field_Api_Name__c = opp.LastName;
+            rule.Field_Value__c = 'Test';
+            rule.Operator__c = 'equal';
             rules.add(rule);
         }
 

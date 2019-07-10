@@ -8,11 +8,10 @@ trigger AccountTrigger on Account (before insert, before update) {
         List<Rule__c> rules = new List<Rule__c>();
         for(Account acc : accounts) {
             Rule__c rule = new Rule__c();
-            rule.Name = 'New Rule Name';
             rule.Object_Api_Name__c = 'Account';
-            rule.Field_Api_Name__c = acc.Name;
-            rule.Field_Value__c = '123213';
-            rule.Operator__c = 'asdasdsa';
+            rule.Field_Api_Name__c = acc.LastName;
+            rule.Field_Value__c = 'Test';
+            rule.Operator__c = 'equal';
             rules.add(rule);
         }
 
