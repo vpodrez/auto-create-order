@@ -2,6 +2,7 @@ trigger ContactTrigger on Contact (before insert, before update) {
 
     if (Trigger.isUpdate) {
          List<Contact> contacts = Trigger.new;
+                                                                                    // add any fields!!!
         Map<String, Rule__c> rules = new Map<String, Rule__c>([Select Field_Api_Name__c From Rule__c Where Object_Api_Name__c = 'Contact']);
 		// all rule for Contact <Field Api Name, Rule>
         for(Contact cont : contacts) {
@@ -16,6 +17,7 @@ trigger ContactTrigger on Contact (before insert, before update) {
 
     if (Trigger.isInsert) {
         List<Contact> contacts = Trigger.new;
+                                                                                    // add any fields!!!
         Map<String, Rule__c> rules = new Map<String, Rule__c>([Select Field_Api_Name__c From Rule__c Where Object_Api_Name__c = 'Contact']);
 		// all rule for Contact <Field Api Name, Rule>
         for(Contact cont : contacts) {

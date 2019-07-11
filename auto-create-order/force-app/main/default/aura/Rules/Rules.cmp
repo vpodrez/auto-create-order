@@ -1,37 +1,55 @@
-<aura:component controller="RuleController" implements="flexipage:availableForAllPageTypes,force:hasSObjectName"
-    access="global">
-    <aura:attribute name="rules" type="List" />
+<aura:component controller="RuleController"
+    implements="flexipage:availableForAllPageTypes,force:hasSObjectName, force:hasRecordId" access="global">
+
+    <aura:attribute name="fieldValue" type="String" />
+    <aura:attribute name="operator" type="List" default="[
+        {'label': 'Equal', 'value': 'equal'},
+        {'label': 'Not Equal', 'value': 'notEqual'},
+        {'label': 'Less than', 'value': 'lessthan'},
+        {'label': 'Greater than', 'value': 'greaterThan'},
+        {'label': 'Less Than or Equal', 'value': 'lessThanOrEqual'},
+        {'label': 'Greater than or Equal', 'value': 'greaterThanOrEqual'},
+        {'label': 'And', 'value': 'and'},
+        {'label': 'Or', 'value': 'or'}
+    ]" />
+    <aura:attribute name="fildApiName" type="String" />
+
     <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+
     <lightning:card title="Rule" variant="Narrow" iconName="utility:rules">
-        <aura:set attribute="actions">
+        <!--aura:set attribute="actions">
             <lightning:buttonIcon iconName="utility:down" variant="border-filled" alternativeText="Show More" />
-        </aura:set>
-        <div class="slds-grid slds-grid_align-center">
+        </aura:set-->
+
+        <div class="slds-grid slds-grid_align-center slds-m-top_medium">
             <div class="slds-col slds-size_2-of-3">
                 <lightning:input name="object" label="Object Api Name" value="{!v.sObjectName}" readonly="true" />
-                <!--lightning:input name="ruleName" label="Rule Name" value="Rule Name" readonly="true" /-->
             </div>
         </div>
-        <div class="slds-grid slds-grid_align-center">
+
+        <div class="slds-grid slds-grid_align-center slds-m-top_medium">
             <div class="slds-col slds-size_2-of-3">
-                <lightning:combobox name="field" label="Field Api Name" value="Choose Api Name"
-                    placeholder="Choose Api Name" options="{!v.rules}" />
+                <lightning:input name="object" label="Object Api Name" value="{!v.fildApiName}" readonly="true" />
             </div>
         </div>
-        <div class="slds-grid slds-grid_align-center">
+
+        <div class="slds-grid slds-grid_align-center slds-m-top_medium">
             <div class="slds-col slds-size_2-of-3">
-                <lightning:input name="value" label="Value" value="Test" readonly="true" />
+                <lightning:input name="value" label="Value" value="{!v.fieldValue}" />
             </div>
         </div>
-        <div class="slds-grid slds-grid_align-center">
+
+        <div class="slds-grid slds-grid_align-center slds-m-top_medium">
             <div class="slds-col slds-size_2-of-3">
-                <lightning:input name="operator" label="Operator" value="equal" readonly="true" />
+                <lightning:combobox aura:id="operator" name="operator" label="Operator" value="Choose Operator"
+                    placeholder="Choose Operator" options="{!v.operator}" />
             </div>
         </div>
-        <div class="slds-grid slds-grid_align-center">
+
+        <div class="slds-grid slds-grid_align-center slds-m-top_medium">
             <div class="slds-col slds-size_2-of-3">
-                <lightning:button variant="brand" label="Save" />
-                <lightning:button label="New" />
+                <lightning:button variant="brand" label="Save" onclick="{!c.save}" />
+                <!--lightning:button label="New" /-->
             </div>
         </div>
     </lightning:card>
