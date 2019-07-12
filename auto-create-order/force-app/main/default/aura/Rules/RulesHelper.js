@@ -1,15 +1,87 @@
 ({
-  executeFildApiNameAction: function(component, action, idObj) {
+  executeFieldApiNameAction: function(component, objName) {
+    var fields = [];
+    var items = [];
+
+    var action = component.get("c.getFields");
     action.setParams({
-      idObj: idObj
+      objName: objName
     });
+
     action.setCallback(this, function(response) {
       var state = response.getState();
       if (state === "SUCCESS") {
-        component.set("v.fildApiName", response.getReturnValue());
+        fields = response.getReturnValue();
+        for (var i = 0; i < fields.length; i++) {
+          var item = {
+            label: fields[i],
+            value: fields[i]
+          };
+          items.push(item);
+        }
+        component.set("v.fieldApiName", items);
       }
     });
 
     $A.enqueueAction(action);
+  },
+
+  saveRule: function(
+    component,
+    helper,
+    objectApiName,
+    fieldApiName,
+    fieldValue,
+    operator
+  ) {
+    var action = component.get("c.saveRule");
+
+    action.setParams({
+      objectApiName: objectApiName,
+      fieldApiName: fieldApiName,
+      fieldValue: fieldValue,
+      operator: operator
+    });
+
+    action.setCallback(this, function(response) {
+      var state = response.getState();
+      if (state === "SUCCESS") {
+        // create tost
+        helper.showSuccessToast();
+        //alert("record has been created");
+        //component.set("v.fieldApiName", response.getReturnValue());
+      }
+      if (state === "ERROR") {
+        helper.showErrorToast();
+      }
+    });
+
+    $A.enqueueAction(action);
+  },
+
+  showSuccessToast: function() {
+    var toastEvent = $A.get("e.force:showToast");
+    toastEvent.setParams({
+      title: "Success",
+      message: "Rule has been created",
+      duration: "2000",
+      key: "info_alt",
+      type: "success",
+      mode: "pester"
+    });
+    toastEvent.fire();
+  },
+
+  showErrorToast: function() {
+    var toastEvent = $A.get("e.force:showToast");
+    toastEvent.setParams({
+      title: "Error ",
+      message: "Rule has not been created",
+      duration: "2000",
+      key: "info_alt",
+      type: "error",
+      mode: "pester"
+    });
+    toastEvent.fire();
   }
 });
