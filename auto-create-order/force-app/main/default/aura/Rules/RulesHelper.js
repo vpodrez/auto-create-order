@@ -1,5 +1,5 @@
 ({
-  executeFieldApiNameAction: function(component, objName) {
+  getFieldApiName: function(component, objName) {
     var fields = [];
     var items = [];
 
@@ -20,6 +20,31 @@
           items.push(item);
         }
         component.set("v.fieldApiName", items);
+      }
+    });
+
+    $A.enqueueAction(action);
+  },
+
+  getProducts: function(component) {
+    var products = [];
+    var items = [];
+
+    var action = component.get("c.getProducts");
+
+    action.setCallback(this, function(response) {
+      var state = response.getState();
+      if (state === "SUCCESS") {
+        products = response.getReturnValue();
+        console.log(products)
+        for (var i = 0; i < products.length; i++) {
+          var item = {
+            label: products[i].Name,
+            value: products[i].Id
+          };
+          items.push(item);
+        }
+        component.set("v.products", items);
       }
     });
 

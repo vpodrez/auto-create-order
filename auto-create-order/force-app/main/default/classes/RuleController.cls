@@ -11,6 +11,13 @@ public with sharing class RuleController {
         return fields;
     }
 
+    @AuraEnabled
+    public static List<Product2> getProducts(){
+        List<Product2> products = [Select Id, Name From Product2];
+
+        return products;
+    }
+
     // add callback for recording record
     @AuraEnabled
     public static void saveRule(String objectApiName, String fieldApiName, String fieldValue, String operator){

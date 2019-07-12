@@ -4,8 +4,9 @@
     // v.sObjectName
 
     var objName = component.get("v.sObjectName") + "";
+    helper.getFieldApiName(component, objName);
 
-    helper.executeFieldApiNameAction(component, objName);
+    helper.getProducts(component);
   },
 
   save: function(component, event, helper) {
