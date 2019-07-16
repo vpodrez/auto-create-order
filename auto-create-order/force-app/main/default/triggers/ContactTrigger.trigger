@@ -6,32 +6,32 @@ trigger ContactTrigger on Contact (before insert, before update) {
 
         for(Contact cont : contacts) {
             for (Rule__c rule : rules) {
-                if (cont.get(rule.Field_Api_Name__c).equals(rule.Field_Value__c) && Operator__c.equals('equal')) {
+                if (cont.get(rule.Field_Api_Name__c).equals(rule.Field_Value__c) && rule.Operator__c.equals('equal')) {
                     Order__c order = new Order__c();
                     order.Name = 'Order for ' + cont.LastName;
                     order.Product__c = rule.Product__c;
                     orders.add(order);
-                } else  if (!cont.get(rule.Field_Api_Name__c).equals(rule.Field_Value__c) && Operator__c.equals('notEqual')) {
+                } else  if (cont.get(rule.Field_Api_Name__c) != rule.Field_Value__c && rule.Operator__c.equals('notEqual')) {
                     Order__c order = new Order__c();
                     order.Name = 'Order for ' + cont.LastName;
                     order.Product__c = rule.Product__c;
                     orders.add(order);
-                } else  if (cont.get(rule.Field_Api_Name__c) < rule.Field_Value__c && Operator__c.equals('lessthan')) {
+                } else  if (Integer.valueof(cont.get(rule.Field_Api_Name__c)) < Integer.valueof(rule.Field_Value__c) && rule.Operator__c.equals('lessthan')) {
                     Order__c order = new Order__c();
                     order.Name = 'Order for ' + cont.LastName;
                     order.Product__c = rule.Product__c;
                     orders.add(order);
-                } else  if (cont.get(rule.Field_Api_Name__c) > rule.Field_Value__c && Operator__c.equals('greaterThan')) {
+                } else  if (Integer.valueof(cont.get(rule.Field_Api_Name__c)) > Integer.valueof(rule.Field_Value__c) && rule.Operator__c.equals('greaterThan')) {
                     Order__c order = new Order__c();
                     order.Name = 'Order for ' + cont.LastName;
                     order.Product__c = rule.Product__c;
                     orders.add(order);
-                } else  if (cont.get(rule.Field_Api_Name__c) <= rule.Field_Value__c && Operator__c.equals('lessThanOrEqual')) {
+                } else  if (Integer.valueof(cont.get(rule.Field_Api_Name__c)) <= Integer.valueof(rule.Field_Value__c) && rule.Operator__c.equals('lessThanOrEqual')) {
                     Order__c order = new Order__c();
                     order.Name = 'Order for ' + cont.LastName;
                     order.Product__c = rule.Product__c;
                     orders.add(order);
-                } else  if (cont.get(rule.Field_Api_Name__c) >= rule.Field_Value__c && Operator__c.equals('greaterThanOrEqual')) {
+                } else  if (Integer.valueof(cont.get(rule.Field_Api_Name__c)) >= Integer.valueof(rule.Field_Value__c) && rule.Operator__c.equals('greaterThanOrEqual')) {
                     Order__c order = new Order__c();
                     order.Name = 'Order for ' + cont.LastName;
                     order.Product__c = rule.Product__c;
