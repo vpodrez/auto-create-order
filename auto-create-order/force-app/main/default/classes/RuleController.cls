@@ -20,10 +20,11 @@ public with sharing class RuleController {
 
     // add callback for recording record
     @AuraEnabled
-    public static void saveRule(String objectApiName, String fieldApiName, String fieldValue, String operator){
+    public static void saveRule(String objectApiName, String fieldApiName, String fieldValue, String productId, String operator){
         Rule__c rule = new Rule__c();
         rule.Object_Api_Name__c = objectApiName;
         rule.Field_Api_Name__c = fieldApiName;
+        rule.Product__c = productId;
         rule.Field_Value__c = fieldValue;
         rule.Operator__c = operator;
 

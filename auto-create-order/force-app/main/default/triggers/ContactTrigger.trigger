@@ -1,32 +1,45 @@
 trigger ContactTrigger on Contact (before insert, before update) {
-
-    if (Trigger.isUpdate) {
-         List<Contact> contacts = Trigger.new;
-                                                                                    // add any fields!!!
-        Map<String, Rule__c> rules = new Map<String, Rule__c>([Select Field_Api_Name__c From Rule__c Where Object_Api_Name__c = 'Contact']);
-		// all rule for Contact <Field Api Name, Rule>
-        for(Contact cont : contacts) {
-            if (cont.LastName == 'Test' && rules.containsKey(cont.LastName)) {
-                // Update Order
-                // Order__c order = new Order__c();
-            }
-        }
-
-        //update order;
-    }
-
-    if (Trigger.isInsert) {
+    if (Trigger.isInsert || Trigger.isUpdate) {
         List<Contact> contacts = Trigger.new;
-                                                                                    // add any fields!!!
-        Map<String, Rule__c> rules = new Map<String, Rule__c>([Select Field_Api_Name__c From Rule__c Where Object_Api_Name__c = 'Contact']);
-		// all rule for Contact <Field Api Name, Rule>
+        List<Rule__c> rules = [Select Object_Api_Name__c, Field_Api_Name__c, Product__c, Field_Value__c, Operator__c From Rule__c Where Object_Api_Name__c = 'Contact'];
+        List<Order__c> orders = new List<Order__c>();
+
         for(Contact cont : contacts) {
-            if (cont.LastName == 'Test' && rules.containsKey(cont.LastName)) {
-                // Insert Order
-                // Order__c order = new Order__c();
+            for (Rule__c rule : rules) {
+                if (cont.get(rule.Field_Api_Name__c).equals(rule.Field_Value__c) && Operator__c.equals('equal')) {
+                    Order__c order = new Order__c();
+                    order.Name = 'Order for ' + cont.LastName;
+                    order.Product__c = rule.Product__c;
+                    orders.add(order);
+                } else  if (!cont.get(rule.Field_Api_Name__c).equals(rule.Field_Value__c) && Operator__c.equals('notEqual')) {
+                    Order__c order = new Order__c();
+                    order.Name = 'Order for ' + cont.LastName;
+                    order.Product__c = rule.Product__c;
+                    orders.add(order);
+                } else  if (cont.get(rule.Field_Api_Name__c) < rule.Field_Value__c && Operator__c.equals('lessthan')) {
+                    Order__c order = new Order__c();
+                    order.Name = 'Order for ' + cont.LastName;
+                    order.Product__c = rule.Product__c;
+                    orders.add(order);
+                } else  if (cont.get(rule.Field_Api_Name__c) > rule.Field_Value__c && Operator__c.equals('greaterThan')) {
+                    Order__c order = new Order__c();
+                    order.Name = 'Order for ' + cont.LastName;
+                    order.Product__c = rule.Product__c;
+                    orders.add(order);
+                } else  if (cont.get(rule.Field_Api_Name__c) <= rule.Field_Value__c && Operator__c.equals('lessThanOrEqual')) {
+                    Order__c order = new Order__c();
+                    order.Name = 'Order for ' + cont.LastName;
+                    order.Product__c = rule.Product__c;
+                    orders.add(order);
+                } else  if (cont.get(rule.Field_Api_Name__c) >= rule.Field_Value__c && Operator__c.equals('greaterThanOrEqual')) {
+                    Order__c order = new Order__c();
+                    order.Name = 'Order for ' + cont.LastName;
+                    order.Product__c = rule.Product__c;
+                    orders.add(order);
+                }
             }
         }
 
-        //insert order;
+        insert orders;
     }
 }

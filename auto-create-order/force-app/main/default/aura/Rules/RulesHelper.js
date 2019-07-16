@@ -36,7 +36,6 @@
       var state = response.getState();
       if (state === "SUCCESS") {
         products = response.getReturnValue();
-        console.log(products)
         for (var i = 0; i < products.length; i++) {
           var item = {
             label: products[i].Name,
@@ -56,14 +55,27 @@
     helper,
     objectApiName,
     fieldApiName,
+    productId,
     fieldValue,
     operator
   ) {
+    if (
+      objectApiName == '' ||
+      fieldApiName == '' ||
+      fieldValue == '' ||
+      productId == '' ||
+      operator == ''
+    ) {
+      helper.showErrorToast();
+      return null;
+    }
+
     var action = component.get("c.saveRule");
 
     action.setParams({
       objectApiName: objectApiName,
       fieldApiName: fieldApiName,
+      productId: productId,
       fieldValue: fieldValue,
       operator: operator
     });
@@ -71,10 +83,7 @@
     action.setCallback(this, function(response) {
       var state = response.getState();
       if (state === "SUCCESS") {
-        // create tost
         helper.showSuccessToast();
-        //alert("record has been created");
-        //component.set("v.fieldApiName", response.getReturnValue());
       }
       if (state === "ERROR") {
         helper.showErrorToast();
