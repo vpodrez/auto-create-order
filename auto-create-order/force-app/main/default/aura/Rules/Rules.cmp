@@ -9,16 +9,13 @@
         {'label': 'Opportunity', 'value': 'Opportunity'}
     ]" />
     <aura:attribute name="fieldApiName" type="List" />
+    <aura:attribute name="fieldApiType" type="List" />
     <aura:attribute name="products" type="List" />
-    <aura:attribute name="fieldValue" type="String" default=""/>
-    <aura:attribute name="operator" type="List" default="[
-        {'label': 'Equal', 'value': 'equal'},
-        {'label': 'Not Equal', 'value': 'notEqual'},
-        {'label': 'Less than', 'value': 'lessthan'},
-        {'label': 'Greater than', 'value': 'greaterThan'},
-        {'label': 'Less Than or Equal', 'value': 'lessThanOrEqual'},
-        {'label': 'Greater than or Equal', 'value': 'greaterThanOrEqual'}
-    ]" />
+    <aura:attribute name="inputTxt" type="String" default="" />
+    <aura:attribute name="selectedProductId" type="String" default="" />
+    <aura:attribute name="fieldValue" type="String" default="" />
+    <aura:attribute name="valueType" type="String" default="" />
+    <aura:attribute name="operator" type="List" />
 
     <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
 
@@ -55,14 +52,51 @@
                 <div class="slds-col slds-size_2-of-3">
                     <lightning:combobox aura:id="field" name="field" label="Field Api Name"
                         value="Choose Field Api Name" placeholder="Choose Field Api Name" options="{!v.fieldApiName}"
-                        required="true" />
+                        required="true" onchange="{!c.changeType}" />
                 </div>
             </div>
 
             <div class="slds-grid slds-grid_align-center slds-m-top_medium">
                 <div class="slds-col slds-size_2-of-3">
-                    <lightning:combobox aura:id="product" name="field" label="Product" value="Choose Product"
-                        placeholder="Choose Product" options="{!v.products}" required="true" />
+                    <!-- add lookup design-->
+                    <lightning:input aura:id="product" name="product" label="Product" type="search"
+                        value="{!v.inputTxt}" onchange="{!c.getProduct}" onfocus="{!c.remHide}" />
+
+                    <div aura:id="productsList"
+                        class="slds-hide slds-col slds-size_2-of-3 slds-dropdown slds-dropdown_length-with-icon-7 slds-dropdown_fluid"
+                        role="listbox">
+                        <ul class="slds-listbox slds-listbox_vertical" role="presentation">
+                            <aura:if isTrue="{!not(empty(v.products))}">
+                                <aura:iteration items="{!v.products}" var="item">
+                                    <li role="presentation" class="slds-listbox__item">
+                                        <div class="slds-media slds-listbox__option slds-listbox__option_entity slds-listbox__option_has-meta"
+                                            role="option">
+                                            <span class="slds-media__body">
+                                                <span class="slds-listbox__option-text slds-listbox__option-text_entity"
+                                                    onclick="{!c.setProduct}"
+                                                    data-value="{!item.Id}">{!item.Name}</span>
+                                            </span>
+                                        </div>
+                                    </li>
+                                </aura:iteration>
+                                <aura:set attribute="else">
+                                    <li role="presentation" class="slds-listbox__item">
+                                        <div class="slds-media slds-listbox__option slds-listbox__option_entity slds-listbox__option_has-meta"
+                                            role="option">
+                                            <span class="slds-media__body">
+                                                <span
+                                                    class="slds-listbox__option-text slds-listbox__option-text_entity">No
+                                                    such records</span>
+                                            </span>
+                                        </div>
+                                    </li>
+                                </aura:set>
+                            </aura:if>
+                        </ul>
+                    </div>
+
+                    <!--lightning:combobox aura:id="product" name="product" label="Product" value="Choose Product"
+                        placeholder="Choose Product" options="{!v.products}" required="true" /-->
                 </div>
             </div>
 
@@ -73,7 +107,7 @@
             </div>
 
             <div class="slds-grid slds-grid_align-center slds-m-top_medium">
-                <div class="slds-col slds-size_2-of-3">
+                <div aura:id="operatorCombobox" class="slds-col slds-size_2-of-3 slds-hide">
                     <lightning:combobox aura:id="operator" name="operator" label="Operator" value="Choose Operator"
                         placeholder="Choose Operator" options="{!v.operator}" required="true" />
                 </div>

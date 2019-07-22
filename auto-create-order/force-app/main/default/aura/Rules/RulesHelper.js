@@ -12,10 +12,40 @@
       var state = response.getState();
       if (state === "SUCCESS") {
         fields = response.getReturnValue();
+        for (var obj in fields) {
+          console.log(fields[obj].type);
+          var item = {
+            label: fields[obj].field,
+            value: fields[obj].field
+          };
+          items.push(item);
+        }
+        component.set("v.fieldApiName", items);
+        component.set("v.fieldApiType", fields);
+      }
+    });
+
+    $A.enqueueAction(action);
+  },
+
+  getFieldApiNameType: function(component, objName) {
+    var fields = [];
+    var items = [];
+
+    var action = component.get("c.getType");
+    action.setParams({
+      objName: objName
+    });
+
+    action.setCallback(this, function(response) {
+      var state = response.getState();
+      if (state === "SUCCESS") {
+        fields = response.getReturnValue();
         for (var i = 0; i < fields.length; i++) {
           var item = {
             label: fields[i],
-            value: fields[i]
+            value: fields[i],
+            type: ""
           };
           items.push(item);
         }
@@ -26,28 +56,31 @@
     $A.enqueueAction(action);
   },
 
-  getProducts: function(component) {
-    var products = [];
-    var items = [];
-
+  getProducts: function(component, inputTxt) {
     var action = component.get("c.getProducts");
+
+    action.setParams({
+      inputTxt: inputTxt
+    });
 
     action.setCallback(this, function(response) {
       var state = response.getState();
       if (state === "SUCCESS") {
-        products = response.getReturnValue();
-        for (var i = 0; i < products.length; i++) {
-          var item = {
-            label: products[i].Name,
-            value: products[i].Id
-          };
-          items.push(item);
-        }
-        component.set("v.products", items);
+        var products = response.getReturnValue();
+        component.set("v.products", products);
       }
     });
 
     $A.enqueueAction(action);
+  },
+
+  selectProduct: function(component, event, helper) {
+    var ctarget = event.currentTarget;
+    var Id = ctarget.dataset.value;
+    var Name = ctarget.innerHTML;
+
+    component.set("v.selectedProductId", Id);
+    component.set("v.inputTxt", Name);
   },
 
   saveRule: function(
@@ -57,14 +90,27 @@
     fieldApiName,
     productId,
     fieldValue,
+    fieldType,
     operator
   ) {
+    console.log(
+      objectApiName +
+        " " +
+        fieldApiName +
+        " " +
+        fieldValue +
+        " " +
+        productId +
+        " " +
+        operator
+    );
     if (
-      objectApiName == '' ||
-      fieldApiName == '' ||
-      fieldValue == '' ||
-      productId == '' ||
-      operator == ''
+      objectApiName == "" ||
+      fieldApiName == "" ||
+      fieldValue == "" ||
+      fieldType == "" ||
+      productId == "" ||
+      operator == ""
     ) {
       helper.showErrorToast();
       return null;
@@ -77,6 +123,7 @@
       fieldApiName: fieldApiName,
       productId: productId,
       fieldValue: fieldValue,
+      fieldType: fieldType,
       operator: operator
     });
 
@@ -84,6 +131,12 @@
       var state = response.getState();
       if (state === "SUCCESS") {
         helper.showSuccessToast();
+        var navEvt = $A.get("e.force:navigateToSObject");
+        navEvt.setParams({
+          recordId: response.getReturnValue(),
+          slideDevName: "related"
+        });
+        navEvt.fire();
       }
       if (state === "ERROR") {
         helper.showErrorToast();
@@ -117,5 +170,10 @@
       mode: "pester"
     });
     toastEvent.fire();
+  },
+
+  setTypeValue: function(component, type) {
+    var value = component.find("value");
+    value.set("v.type", type);
   }
 });

@@ -1,33 +1,51 @@
 public with sharing class RuleController {
 
-    @AuraEnabled
-    public static List<String> getFields(String objName){
-        Map<String, Schema.SObjectField> objFields = Schema.getGlobalDescribe().get(objName).getDescribe().fields.getMap();
-        List<String> fields = new List<String>();
-        for (String idKey : objFields.keyset()) {
-            fields.add(objFields.get(idKey) + '');
-        }
+public class FieldApi {
+@AuraEnabled
+public String field;
 
-        return fields;
-    }
+@AuraEnabled
+public String type;
+}
 
-    @AuraEnabled
-    public static List<Product2> getProducts(){
-        List<Product2> products = [Select Id, Name From Product2];
+@AuraEnabled
+public static List<FieldApi> getFields(String objName){
+	Map<String, Schema.SObjectField> objFields = Schema.getGlobalDescribe().get(objName).getDescribe().fields.getMap();
+	List<FieldApi> fields = new List<FieldApi>();
+	for (String idKey : objFields.keyset()) {
+		SObjectType r = ((SObject)(Type.forName('Schema.' + objName).newInstance())).getSObjectType();
+		DescribeSObjectResult d = r.getDescribe();
+		FieldApi fieldApi = new FieldApi();
+		fieldApi.field = objFields.get(idKey) + '';
+		fieldApi.type = d.fields.getMap().get(objFields.get(idKey) + '').getDescribe().getType() + '';
+		fields.add(fieldApi);
+	}
 
-        return products;
-    }
+	return fields;
+}
 
-    // add callback for recording record
-    @AuraEnabled
-    public static void saveRule(String objectApiName, String fieldApiName, String fieldValue, String productId, String operator){
-        Rule__c rule = new Rule__c();
-        rule.Object_Api_Name__c = objectApiName;
-        rule.Field_Api_Name__c = fieldApiName;
-        rule.Product__c = productId;
-        rule.Field_Value__c = fieldValue;
-        rule.Operator__c = operator;
+@AuraEnabled
+public static List<Product2> getProducts(String inputTxt){
 
-        insert rule;
-    }
+	String input =  '%' + inputTxt + '%';
+	List<Product2> products = [Select Id, Name From Product2 Where Name Like :input];
+
+	return products;
+}
+
+// add callback for recording record
+@AuraEnabled
+public static Id saveRule(String objectApiName, String fieldApiName, String productId, String fieldValue, String fieldType, String operator){
+	System.debug('#### save ' + objectApiName + ' ' + fieldApiName + ' ' + fieldValue + ' ' + productId + ' ' + operator);
+	Rule__c rule = new Rule__c();
+	rule.Object_Api_Name__c = objectApiName;
+	rule.Field_Api_Name__c = fieldApiName;
+	rule.Product__c = productId;
+	rule.Field_Value__c = fieldValue;
+	rule.Field_Api_Type__c = fieldType;
+	rule.Operator__c = operator;
+
+	insert rule;
+	return rule.Id;
+}
 }
