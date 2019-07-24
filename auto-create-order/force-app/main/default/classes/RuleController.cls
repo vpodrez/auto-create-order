@@ -36,7 +36,6 @@ public static List<Product2> getProducts(String inputTxt){
 // add callback for recording record
 @AuraEnabled
 public static Id saveRule(String objectApiName, String fieldApiName, String productId, String fieldValue, String fieldType, String operator){
-	System.debug('#### save ' + objectApiName + ' ' + fieldApiName + ' ' + fieldValue + ' ' + productId + ' ' + operator);
 	Rule__c rule = new Rule__c();
 	rule.Object_Api_Name__c = objectApiName;
 	rule.Field_Api_Name__c = fieldApiName;

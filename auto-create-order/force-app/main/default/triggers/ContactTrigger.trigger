@@ -6,7 +6,7 @@ trigger ContactTrigger on Contact (before insert, before update) {
 
 		for(Contact cont : contacts) {
 			for (Rule__c rule : rules) {
-				if (CompareCondition.compare(rule.Operator__c, String.valueOf(cont.get(rule.Field_Api_Name__c)), rule.Field_Value__c, rule.Field_Api_Type__c)) {
+				if (cont.get(rule.Field_Api_Name__c) != null && CompareCondition.compare(rule.Operator__c, String.valueOf(cont.get(rule.Field_Api_Name__c)), rule.Field_Value__c, rule.Field_Api_Type__c)) {
 					Order__c order = new Order__c();
 					order.Name = 'Order for ' + cont.LastName;
 					order.Product__c = rule.Product__c;

@@ -6,7 +6,7 @@ trigger AccountTrigger on Account (before insert, before update) {
 
 		for(Account acc : accounts) {
 			for (Rule__c rule : rules) {
-				if (CompareCondition.compare(rule.Operator__c, String.valueOf(acc.get(rule.Field_Api_Name__c)), rule.Field_Value__c, rule.Field_Api_Type__c)) {
+				if (acc.get(rule.Field_Api_Name__c) != null && CompareCondition.compare(rule.Operator__c, String.valueOf(acc.get(rule.Field_Api_Name__c)), rule.Field_Value__c, rule.Field_Api_Type__c)) {
 					Order__c order = new Order__c();
 					order.Name = 'Order for ' + acc.Name;
 					order.Product__c = rule.Product__c;

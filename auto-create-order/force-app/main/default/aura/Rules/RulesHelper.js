@@ -104,14 +104,8 @@
         " " +
         operator
     );
-    if (
-      objectApiName == "" ||
-      fieldApiName == "" ||
-      fieldValue == "" ||
-      fieldType == "" ||
-      productId == "" ||
-      operator == ""
-    ) {
+
+    if (!helper.checkValidity(component)) {
       helper.showErrorToast();
       return null;
     }
@@ -175,5 +169,31 @@
   setTypeValue: function(component, type) {
     var value = component.find("value");
     value.set("v.type", type);
+  },
+
+  checkValidity: function(component) {
+    var object = component.find("object").get("v.validity");
+    var field = component.find("field").get("v.validity");
+    var product = component.find("product").get("v.validity");
+    var value = component.find("value").get("v.validity");
+    var valueType = component.find("value").get("v.type");
+    var operator = component.find("operator").get("v.validity");
+    if (
+      (object.valid &&
+        field.valid &&
+        product.valid &&
+        value.valid &&
+        operator.valid) ||
+      (object.valid &&
+        field.valid &&
+        product.valid &&
+        operator.valid &&
+        !value.valid &&
+        valueType == "toggle")
+    ) {
+      return true;
+    } else {
+      return false;
+    }
   }
 });

@@ -41,8 +41,8 @@
                             readonly="true" />
                         <aura:set attribute="else">
                             <lightning:combobox aura:id="object" name="object" label="Object Api Name"
-                                value="Choose Object Api Name" placeholder="Choose Object Api Name"
-                                options="{!v.objectApiName}" required="true" onchange="{!c.setFieldApiName}" />
+                                placeholder="Choose Object Api Name" options="{!v.objectApiName}" required="true"
+                                onchange="{!c.setFieldApiName}" messageWhenValueMissing="Choose Object Api Name" />
                         </aura:set>
                     </aura:if>
                 </div>
@@ -51,16 +51,16 @@
             <div class="slds-grid slds-grid_align-center slds-m-top_medium">
                 <div class="slds-col slds-size_2-of-3">
                     <lightning:combobox aura:id="field" name="field" label="Field Api Name"
-                        value="Choose Field Api Name" placeholder="Choose Field Api Name" options="{!v.fieldApiName}"
-                        required="true" onchange="{!c.changeType}" />
+                        placeholder="Choose Field Api Name" options="{!v.fieldApiName}" required="true"
+                        onchange="{!c.changeType}" messageWhenValueMissing="Choose Field Api Name" />
                 </div>
             </div>
 
             <div class="slds-grid slds-grid_align-center slds-m-top_medium">
                 <div class="slds-col slds-size_2-of-3">
-                    <!-- add lookup design-->
-                    <lightning:input aura:id="product" name="product" label="Product" type="search"
-                        value="{!v.inputTxt}" onchange="{!c.getProduct}" onfocus="{!c.remHide}" />
+                    <lightning:input aura:id="product" name="product" label="Product" type="search" required="true"
+                        value="{!v.inputTxt}" onchange="{!c.getProduct}" onfocus="{!c.remHide}"
+                        messageWhenValueMissing="Choose Product" />
 
                     <div aura:id="productsList"
                         class="slds-hide slds-col slds-size_2-of-3 slds-dropdown slds-dropdown_length-with-icon-7 slds-dropdown_fluid"
@@ -94,22 +94,21 @@
                             </aura:if>
                         </ul>
                     </div>
-
-                    <!--lightning:combobox aura:id="product" name="product" label="Product" value="Choose Product"
-                        placeholder="Choose Product" options="{!v.products}" required="true" /-->
                 </div>
             </div>
 
             <div class="slds-grid slds-grid_align-center slds-m-top_medium">
                 <div class="slds-col slds-size_2-of-3">
-                    <lightning:input aura:id="value" name="value" label="Value" value="{!v.fieldValue}" />
+                    <lightning:input aura:id="value" name="value" label="Value" required="true" value="{!v.fieldValue}"
+                        onblur="{!c.hideError}" />
                 </div>
             </div>
 
             <div class="slds-grid slds-grid_align-center slds-m-top_medium">
                 <div aura:id="operatorCombobox" class="slds-col slds-size_2-of-3 slds-hide">
-                    <lightning:combobox aura:id="operator" name="operator" label="Operator" value="Choose Operator"
-                        placeholder="Choose Operator" options="{!v.operator}" required="true" />
+                    <lightning:combobox aura:id="operator" name="operator" label="Operator"
+                        placeholder="Choose Operator" options="{!v.operator}" required="true"
+                        messageWhenValueMissing="Choose Operator" />
                 </div>
             </div>
 

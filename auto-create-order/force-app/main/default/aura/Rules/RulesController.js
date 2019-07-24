@@ -18,7 +18,7 @@
     var fieldApiName = component.find("field").get("v.value");
     var productId = component.get("v.selectedProductId");
     var fieldValue =
-      component.find("value").get("v.value") != ""
+      component.find("value").get("v.type") != "toggle"
         ? component.find("value").get("v.value")
         : component.find("value").get("v.checked");
     var fieldType = component.get("v.valueType");
@@ -69,14 +69,19 @@
     value.set("v.formatter", "");
     value.set("v.step", "");
     value.set("v.checked", "");
+    //value.set("v.messageWhenValueMissing", "");
+    //$A.util.addClass(value, "slds-has-error");
     if (valueType === "BOOLEAN") {
       helper.setTypeValue(component, "toggle");
     } else if (valueType === "EMAIL") {
       helper.setTypeValue(component, "email");
+     // value.set("v.messageWhenValueMissing", "Enter Email.");
     } else if (valueType === "PHONE") {
       helper.setTypeValue(component, "tel");
+     // value.set("v.messageWhenValueMissing", "Enter Phone.");
     } else if (valueType === "URL") {
       helper.setTypeValue(component, "url");
+      //value.set("v.messageWhenValueMissing", "Enter URL.");
     } else if (
       valueType === "CURRENCY" ||
       valueType === "DOUBLE" ||
@@ -84,24 +89,31 @@
       valueType === "PERCENT"
     ) {
       helper.setTypeValue(component, "number");
+     // value.set("v.messageWhenValueMissing", "Enter Integer Value.");
       if (valueType === "CURRENCY") {
         value.set("v.formatter", "currency");
         value.set("v.step", "0.01");
+     //   value.set("v.messageWhenValueMissing", "Enter Currency Value.");
       } else if (valueType === "PERCENT") {
         var value = component.find("value");
         value.set("v.formatter", "percent");
         value.set("v.step", "0.01");
+     //   value.set("v.messageWhenValueMissing", "Enter Percent Value.");
       } else if (valueType === "DOUBLE") {
         var value = component.find("value");
         value.set("v.formatter", "decimal");
         value.set("v.step", "0.01");
+     //   value.set("v.messageWhenValueMissing", "Enter Double Value.");
       }
     } else if (valueType === "DATE") {
       helper.setTypeValue(component, "date");
+      //value.set("v.messageWhenValueMissing", "Enter Date Value.");
     } else if (valueType === "DATETIME") {
       helper.setTypeValue(component, "datetime");
+      //value.set("v.messageWhenValueMissing", "Enter Date and Time Value.");
     } else {
       helper.setTypeValue(component, "");
+     // value.set("v.messageWhenValueMissing", "");
     }
 
     if (
@@ -145,5 +157,14 @@
   remHide: function(component, event, helper) {
     var productsList = component.find("productsList");
     $A.util.removeClass(productsList, "slds-hide");
+  },
+
+  hideError: function(component, event, helper) {
+    if (component.find("value").get("v.type") == "toggle") {
+      $A.util.removeClass(component.find("value"), "slds-has-error");
+      $A.util.addClass(component.find("value"), "hide-error-message");
+    } else {
+      $A.util.removeClass(component.find("value"), "hide-error-message");
+    }
   }
 });
